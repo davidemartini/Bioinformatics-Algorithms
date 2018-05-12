@@ -1,0 +1,51 @@
+Turtle: Identifying frequent k-mers with cache-efficient algorithms
+Copyright 2014 Rajat Shuvro Roy, Alexander Schliep
+
+This file is part of Turtle-0.3.
+
+    Turtle-0.3 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    Turtle-0.3 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Turtle-0.3.  If not, see <http://www.gnu.org/licenses/>.
+
+Introduction
+============
+We provide three tools scTurtle, cTurtle and aTurtle. Each tool comes with a 32 and a 64 version that indicates the maximum k-mer length it can handle. scTurtle reports k-mers with frequency >1 with counts, cTurtle only reports k-mers with frequency >1 but not their counts and aTurtle reports all k-mers with counts. scTurtle has some false positives and cTurtle has both false positives and false negatives. aTurtle gives exact counts.
+
+Installation
+============
+We tested our program on Fedora with Linux version 2.6.35.13-92.fc14.x86 64 (with gcc version 4.5.1) and Ubuntu with Linux version 3.2.0-49-generic (with gcc version 4.6.3). We also successfully ran Turtle on a MacOs (Unix 11.4.2) with gcc 4.7.3 and 4.8.0. The minimum gcc version required is 4.5.1.
+
+At the Turtle directory, type "make" to create the executables. You may include the Turtle directory in your PATH  or copy the executables in a directory included in your path for your convenience. The tar ball includes pre-compiled linux binaries. If you are running on a different platform (e.g. MAC) or wish to re-compile them using your system compiler, please remove the executables before running "make".
+
+Running Instructions
+=====================
+We provide 2 read files (1Mreads.fa and 1Mreads.fq) which contain the same reads but one of them is in fasta format and the other is in fastq format. You may download the files seperately from our site. Our examples assume that you have these files in your Turtle directory.
+
+For instructions on how to run the executables, run them with -h option. The help menu comes with an example. For example, to get instructions on scTurtle32 type ./scTurtle32 -h.
+
+scTurtle32 Usage:
+scTurtle32 [arguments]
+example: ./scTurtle32 -f 1Mreads.fq -o kmer_counts -k 31 -n 6000000 -t 9
+-i       input reads file in fasta format.
+-f       input reads file in fastq format. This is mutually exclusive with -i.
+-o       ouput files prefix. k-mers and their counts are stored in fasta format (headers indicating frequency) in multiple files named prefix0...prefix(t-1) which the user can concatenate if desired.
+-q       ouput files prefix. k-mers and their counts are stored in tab delimited fromat (quake compatible) in multiple files named prefix0...prefix(t-1) which the user can concatenate if desired.
+-k       k-mer length.
+-t       Number of workers threads. It is recommended that a prime (or at least an odd) number of workers are used and it is less than the number of cores on the machine.
+-n       Expected number of frequent k-mers. For uniform coverage libraries this is usually close to genome length. For single-cell libraries, 2-3 times the gemome length is recommended.
+-s       The approximate amount of space (in GB) to be used. It is used to indirectly compute -n and is mutually exclusive with -n. When both -n and -s are specified, the one that appears last is used.
+-h       Print this help menu.
+-v       Print software version.
+
+Recommended parameter choices
+=============================
+For efficient parallelization and minimization of False Positives (and False Negatives for cTurtle) we recommend that a prime (or at least an odd) number of threads be used (-t INT). 
